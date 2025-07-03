@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Calendar, MapPin } from "lucide-react";
 import { EventT } from "@/types/types";
+import Link from "next/link";
 
 const EventCard = ({
   event,
@@ -30,7 +31,9 @@ const EventCard = ({
         />
       </div>
       <CardHeader>
-        <CardTitle className="text-white text-lg">{event.name}</CardTitle>
+        <CardTitle className="text-white text-lg">
+          <Link href={`events/${event.id}`}>{event.name}</Link>
+        </CardTitle>
         <div className="flex items-center text-sm text-gray-400 gap-4 pt-1">
           <span className="flex items-center gap-1">
             <Calendar className="h-4 w-4" /> {formatDate(event.date)}
