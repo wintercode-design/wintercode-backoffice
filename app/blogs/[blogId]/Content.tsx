@@ -1,26 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Blog } from "@/types/types";
+import { BlogQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const blogQuery = new BlogQuery();
 
 const Content = ({ blogId }: { blogId: string }) => {
-  const [blog, setBlog] = useState<Blog | null>(null);
+  const {
+    data: blog,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["blogDetail", blogId],
+    queryFn: () => blogQuery.getOne(Number(blogId)),
+    enabled: !!blogId,
+  });
 
-  useEffect(() => {
-    const savedBlogs = localStorage.getItem("blogs");
-    if (savedBlogs) {
-      const blogData = JSON.parse(savedBlogs).find(
-        (p: Blog) => p.id.toString() === blogId
-      );
-      setBlog(blogData);
-    }
-  }, [blogId]);
-
-  if (!blog) {
-    return <div className="text-center py-12">Loading blog post...</div>;
+  if (isLoading) return <Loading status="loading" />;
+  if (isError || !blog) {
+    return <div className="text-center py-12">Blog post not found.</div>;
   }
 
   const formatDate = (dateString: string) =>
@@ -62,7 +65,7 @@ const Content = ({ blogId }: { blogId: string }) => {
         <footer className="mt-8 pt-8 border-t border-white/20">
           <div className="flex items-center gap-2 flex-wrap">
             <Tag className="h-4 w-4 text-gray-400" />
-            {blog.tags.map((tag) => (
+            {blog.tags.split(",").map((tag: string) => (
               <span
                 key={tag}
                 className="px-3 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full"

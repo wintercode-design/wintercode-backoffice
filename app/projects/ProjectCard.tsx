@@ -40,7 +40,7 @@ const ProjectCard = ({
             </span>
             <span
               className={`px-2 py-1 rounded-full ${
-                project.status === "Completed"
+                project.status === "RESOLVED"
                   ? "bg-green-500/20 text-green-300"
                   : "bg-yellow-500/20 text-yellow-300"
               }`}

@@ -1,26 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Clock, MapPin, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EventT } from "@/types/types";
+import { EventQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
 import Link from "next/link";
 
+const eventQuery = new EventQuery();
+
 const Content = ({ eventId }: { eventId: string }) => {
-  const [event, setEvent] = useState<EventT | null>(null);
+  const {
+    data: event,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["eventDetail", eventId],
+    queryFn: () => eventQuery.getOne(Number(eventId)),
+    enabled: !!eventId,
+  });
 
-  useEffect(() => {
-    const savedEvents = localStorage.getItem("events");
-    if (savedEvents) {
-      const eventData = JSON.parse(savedEvents).find(
-        (e: EventT) => e.id.toString() === eventId
-      );
-      setEvent(eventData);
-    }
-  }, [eventId]);
-
-  if (!event) {
+  if (isLoading) return <Loading status="loading" />;
+  if (isError || !event) {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl text-white">Event not found</h2>
@@ -94,9 +97,11 @@ const Content = ({ eventId }: { eventId: string }) => {
         </CardHeader>
         <CardContent>
           <div className="prose prose-invert max-w-none text-gray-300 leading-relaxed">
-            {event.description.split("\n").map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+            {event.description
+              .split("\n")
+              .map((paragraph: string, index: number) => (
+                <p key={index}>{paragraph}</p>
+              ))}
           </div>
         </CardContent>
       </Card>

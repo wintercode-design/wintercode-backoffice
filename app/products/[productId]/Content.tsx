@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -13,24 +13,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Product } from "@/types/types";
+import { ProductQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const productQuery = new ProductQuery();
 
 const Content = ({ productId }: { productId: string }) => {
-  const [product, setProduct] = useState<Product | null>(null);
+  const {
+    data: product,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["productDetail", productId],
+    queryFn: () => productQuery.getOne(Number(productId)),
+    enabled: !!productId,
+  });
 
-  useEffect(() => {
-    const savedProducts = localStorage.getItem("products");
-    if (savedProducts) {
-      const productData = JSON.parse(savedProducts).find(
-        (p: Product) => p.id.toString() === productId
-      );
-      setProduct(productData);
-    }
-  }, [productId]);
-
-  console.log(productId);
-
-  if (!product) {
+  if (isLoading) return <Loading status="loading" />;
+  if (isError || !product) {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl text-white">Product not found</h2>

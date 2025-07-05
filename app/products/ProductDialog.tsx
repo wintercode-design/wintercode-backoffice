@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Product } from "@/types/types";
+import { Product, Status } from "@/types/types";
 
 const ProductDialog = ({
   isOpen,
@@ -70,9 +70,11 @@ const ProductDialog = ({
     setFormData((prev: FormData) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onSubmit({
       ...formData,
+      status: formData.status as Status,
       price: parseFloat(formData.price),
       stock: parseInt(formData.stock),
     });

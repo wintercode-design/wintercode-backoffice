@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Review } from "@/types/types";
+import { Review, Status } from "@/types/types";
 
 const ReviewDialog = ({
   isOpen,
@@ -79,6 +79,7 @@ const ReviewDialog = ({
     e.preventDefault();
     onSubmit({
       ...formData,
+      status: formData.status as Status,
       createdAt: new Date("now").toLocaleString(),
       rating: parseInt(formData.rating),
     });

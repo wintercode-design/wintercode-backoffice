@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TeamMember } from "@/types/types";
+import { Status, TeamMember } from "@/types/types";
 
 const TeamMemberDialog = ({
   isOpen,
@@ -40,7 +40,7 @@ const TeamMemberDialog = ({
     github: "",
     website: "",
     resumeUrl: "",
-    certifications: "",
+    // certifications: "",
     achievements: "",
     skills: "",
     status: "active",
@@ -51,16 +51,16 @@ const TeamMemberDialog = ({
       setFormData({
         ...editingMember,
         resumeUrl: "",
-        certifications: Array.isArray(editingMember.certifications)
-          ? editingMember.certifications
-              .map((c) => `${c.name}|${c.issuer}|${c.year}|${c.url}`)
-              .join("\n")
-          : "",
+        // certifications: Array.isArray(editingMember.certifications)
+        //   ? editingMember.certifications
+        //       .map((c) => `${c.name}|${c.issuer}|${c.year}|${c.url}`)
+        //       .join("\n")
+        //   : "",
         achievements: Array.isArray(editingMember.achievements)
           ? editingMember.achievements.join("\n")
           : "",
         skills: Array.isArray(editingMember.skills)
-          ? editingMember.skills.join(", ")
+          ? editingMember.skills.join("; ")
           : "",
       });
     } else {
@@ -74,7 +74,7 @@ const TeamMemberDialog = ({
         github: "",
         website: "",
         resumeUrl: "",
-        certifications: "",
+        // certifications: "",
         achievements: "",
         skills: "",
         status: "active",
@@ -93,18 +93,20 @@ const TeamMemberDialog = ({
     e.preventDefault();
     const processedData = {
       ...formData,
-      certifications: formData.certifications
-        .split("\n")
-        .filter(Boolean)
-        .map((line) => {
-          const [name, issuer, year, url] = line.split("|");
-          return { name, issuer, year, url };
-        }),
-      achievements: formData.achievements.split("\n").filter(Boolean),
-      skills: formData.skills
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      // certifications: formData.certifications
+      //   .split("\n")
+      //   .filter(Boolean)
+      //   .map((line) => {
+      //     const [name, issuer, year, url] = line.split("|");
+      //     return { name, issuer, year, url };
+      //   }),
+      status: formData.status as Status,
+      achievements: formData.achievements.split("\n").join(";"),
+      skills: formData.skills,
+      // skills: formData.skills
+      //   .split(",")
+      //   .map((s) => s.trim())
+      //   .filter(Boolean),
     };
     onSubmit(processedData);
   };
@@ -273,7 +275,7 @@ const TeamMemberDialog = ({
               rows={4}
             />
           </div>
-          <div>
+          {/* <div>
             <Label htmlFor="certifications" className="text-white">
               Certifications (one per line: Name|Issuer|Year|URL)
             </Label>
@@ -284,7 +286,7 @@ const TeamMemberDialog = ({
               className="bg-white/10 border-white/20 text-white"
               rows={4}
             />
-          </div>
+          </div> */}
           <div className="flex justify-end gap-2 pt-4">
             <Button
               type="button"

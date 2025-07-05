@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Project } from "@/types/types";
+import { Project, Status } from "@/types/types";
 
 const ProjectDialog = ({
   isOpen,
@@ -33,7 +33,7 @@ const ProjectDialog = ({
   const [formData, setFormData] = useState({
     title: "",
     category: "",
-    status: "In Progress",
+    status: "PENDING",
     startDate: "",
     endDate: "",
     description: "",
@@ -46,7 +46,7 @@ const ProjectDialog = ({
       setFormData({
         title: "",
         category: "",
-        status: "In Progress",
+        status: "PENDING",
         startDate: "",
         endDate: "",
         description: "",
@@ -67,7 +67,7 @@ const ProjectDialog = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({ ...formData, status: formData.status as Status });
   };
 
   return (

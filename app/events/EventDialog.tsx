@@ -35,7 +35,10 @@ const EventDialog = ({
 
   useEffect(() => {
     if (editingEvent) {
-      setFormData(editingEvent);
+      setFormData({
+        ...editingEvent,
+        imageUrl: editingEvent.imageUrl || "",
+      });
     } else {
       setFormData({
         name: "",
@@ -91,6 +94,19 @@ const EventDialog = ({
                 id="date"
                 type="date"
                 value={formData.date}
+                onChange={handleChange}
+                className="bg-white/10 border-white/20 text-white"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="time" className="text-white">
+                Time
+              </Label>
+              <Input
+                id="time"
+                type="time"
+                value={formData.time}
                 onChange={handleChange}
                 className="bg-white/10 border-white/20 text-white"
                 required

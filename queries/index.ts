@@ -1,0 +1,12 @@
+export { default as ProductQuery } from "./product";
+export { default as BlogQuery } from "./blog";
+export { default as AdQuery } from "./ad";
+export { default as TeamQuery } from "./team";
+export { default as ReviewQuery } from "./review";
+export { default as ProjectQuery } from "./project";
+export { default as EventQuery } from "./event";
+export { default as ContactQuery } from "./contact";
+export { default as FaqQuery } from "./faq";
+export { default as NewsletterQuery } from "./newsletter";
+export { default as OfferQuery } from "./offer";
+export * from "./auth";

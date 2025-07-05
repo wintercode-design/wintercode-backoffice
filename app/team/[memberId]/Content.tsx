@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -12,21 +12,25 @@ import ProfileHeader from "../ProfileHeader";
 import ProfileSection from "../ProfileSection";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { TeamMember } from "@/types/types";
+import { TeamQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const teamQuery = new TeamQuery();
+
 const Content = ({ memberId }: { memberId: string }) => {
-  const [member, setMember] = useState<TeamMember | null>(null);
+  const {
+    data: member,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["teamMemberDetail", memberId],
+    queryFn: () => teamQuery.getOne(Number(memberId)),
+    enabled: !!memberId,
+  });
 
-  useEffect(() => {
-    const savedMembers = localStorage.getItem("team_members");
-    if (savedMembers) {
-      const memberData = JSON.parse(savedMembers).find(
-        (m: TeamMember) => m.id.toString() === memberId
-      );
-      setMember(memberData);
-    }
-  }, [memberId]);
-
-  if (!member) {
+  if (isLoading) return <Loading status="loading" />;
+  if (isError || !member) {
     return (
       <div className="text-center py-20">
         <h2 className="text-2xl text-white">Member not found</h2>
@@ -61,21 +65,23 @@ const Content = ({ memberId }: { memberId: string }) => {
         <div className="lg:col-span-2 space-y-8">
           <ProfileSection title="Achievements">
             <ul className="list-disc list-inside space-y-2 text-gray-300">
-              {member.achievements?.map((item, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                >
-                  <Award className="inline h-4 w-4 mr-2 text-yellow-400" />
-                  {item}
-                </motion.li>
-              ))}
+              {member.achievements
+                ?.split(",")
+                .map((item: string, index: number) => (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + index * 0.1 }}
+                  >
+                    <Award className="inline h-4 w-4 mr-2 text-yellow-400" />
+                    {item}
+                  </motion.li>
+                ))}
             </ul>
           </ProfileSection>
 
-          <ProfileSection title="Certifications">
+          {/* <ProfileSection title="Certifications">
             <div className="space-y-4">
               {member.certifications?.map((cert, index) => (
                 <motion.div
@@ -108,13 +114,13 @@ const Content = ({ memberId }: { memberId: string }) => {
                 </motion.div>
               ))}
             </div>
-          </ProfileSection>
+          </ProfileSection> */}
         </div>
 
         <div className="space-y-8">
           <ProfileSection title="Skills">
             <div className="flex flex-wrap gap-2">
-              {member.skills?.map((skill, index) => (
+              {member.skills?.split(",").map((skill: string, index: number) => (
                 <motion.span
                   key={index}
                   className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full"

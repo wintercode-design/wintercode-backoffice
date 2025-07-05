@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Blog } from "@/types/types";
+import { Blog, Status } from "@/types/types";
 
 const BlogDialog = ({
   isOpen,
@@ -34,20 +34,20 @@ const BlogDialog = ({
     title: "",
     author: "",
     category: "Tech",
-    status: "published",
+    status: "PUBLISHED",
     content: "",
     tags: "",
   });
 
   useEffect(() => {
     if (editingBlog) {
-      setFormData({ ...editingBlog, tags: editingBlog.tags.join(", ") });
+      setFormData({ ...editingBlog, tags: editingBlog.tags });
     } else {
       setFormData({
         title: "",
         author: "Admin",
         category: "Tech",
-        status: "published",
+        status: "PUBLISHED",
         content: "",
         tags: "",
       });
@@ -70,7 +70,11 @@ const BlogDialog = ({
     onSubmit({
       ...formData,
       publishedDate: new Date().toDateString(),
-      tags: formData.tags.split(",").map((tag) => tag.trim()),
+      tags: formData.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .join(","),
+      status: formData.status as Status,
     });
   };
 

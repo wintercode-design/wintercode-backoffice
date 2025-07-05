@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,64 +7,59 @@ import { useToast } from "@/components/custom/use-toast";
 import ProductCard from "./ProductCard";
 import ProductDialog from "./ProductDialog";
 import { Product } from "@/types/types";
+import { ProductQuery } from "@/queries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const product = new ProductQuery();
 
 function Products() {
-  const [products, setProducts] = useState<Product[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const savedProducts = localStorage.getItem("products");
-    if (savedProducts) {
-      setProducts(JSON.parse(savedProducts));
-    } else {
-      const sampleProducts = [
-        {
-          id: 1,
-          name: "Premium Web Hosting",
-          description:
-            "lorem Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error earum non unde tempore magnam, optio nisi natus asperiores numquam inventore porro eum delectus neque nam magni deleniti reprehenderit perspiciatis soluta.",
-          price: 29.99,
-          stock: 100,
-          category: "Hosting",
-          status: "in-stock",
-          imageUrl:
-            "https://images.unsplash.com/photo-1580894908361-967195033215?w=400",
-        },
-        {
-          id: 2,
-          name: "Advanced SEO Package",
-          description:
-            "lorem Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error earum non unde tempore magnam, optio nisi natus asperiores numquam inventore porro eum delectus neque nam magni deleniti reprehenderit perspiciatis soluta.",
-          price: 199.0,
-          stock: 50,
-          category: "Marketing",
-          status: "in-stock",
-          imageUrl:
-            "https://images.unsplash.com/photo-1559526324-c1f275fbfa32?w=400",
-        },
-      ];
-      setProducts(sampleProducts);
-      localStorage.setItem("products", JSON.stringify(sampleProducts));
-    }
-  }, []);
+  const productData = useQuery({
+    queryKey: ["productFetchAll"],
+    queryFn: () => product.getAll(),
+  });
 
-  const saveProducts = (updatedProducts: Product[]) => {
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
-  };
+  const createMutation = useMutation({
+    mutationFn: (formData: Omit<Product, "id">) => product.create(formData),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["productFetchAll"] }),
+    onError: () =>
+      toast({ title: "Failed to create product", variant: "destructive" }),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({
+      id,
+      formData,
+    }: {
+      id: number;
+      formData: Omit<Product, "id">;
+    }) => product.update(id, formData),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["productFetchAll"] }),
+    onError: () =>
+      toast({ title: "Failed to update product", variant: "destructive" }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => product.delete(id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["productFetchAll"] }),
+    onError: () =>
+      toast({ title: "Failed to delete product", variant: "destructive" }),
+  });
 
   const handleSubmit = (formData: Omit<Product, "id">) => {
     if (editingProduct) {
-      const updatedProducts = products.map((p) =>
-        p.id === editingProduct.id ? { ...editingProduct, ...formData } : p
-      );
-      saveProducts(updatedProducts);
+      updateMutation.mutate({ id: editingProduct.id, formData });
       toast({ title: "Product updated successfully!" });
     } else {
-      const newProduct = { ...formData, id: Date.now() };
-      saveProducts([...products, newProduct]);
+      createMutation.mutate(formData);
       toast({ title: "Product created successfully!" });
     }
     setEditingProduct(null);
@@ -77,58 +72,69 @@ function Products() {
   };
 
   const handleDelete = (id: number) => {
-    const updatedProducts = products.filter((p) => p.id !== id);
-    saveProducts(updatedProducts);
+    deleteMutation.mutate(id);
     toast({ title: "Product deleted successfully!" });
   };
 
-  return (
-    <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex justify-between items-center"
-      >
-        <div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">Products</h1>
-          <p className="text-gray-400">Manage your products and services</p>
-        </div>
-        <Button
-          className="bg-gradient-to-r from-red-500 to-orange-500"
-          onClick={() => {
-            setEditingProduct(null);
-            setIsDialogOpen(true);
-          }}
+  if (productData.isLoading) {
+    return <Loading status={"loading"} />;
+  }
+
+  if (productData.isError) {
+    return <Loading status={"failed"} />;
+  }
+
+  if (productData.isSuccess) {
+    return (
+      <div className="space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-between items-center"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          New Product
-        </Button>
-      </motion.div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((product, index) => (
-          <motion.div
-            key={product.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+          <div>
+            <h1 className="text-4xl font-bold gradient-text mb-2">Products</h1>
+            <p className="text-gray-400">Manage your products and services</p>
+          </div>
+          <Button
+            className="bg-gradient-to-r from-red-500 to-orange-500"
+            onClick={() => {
+              setEditingProduct(null);
+              setIsDialogOpen(true);
+            }}
           >
-            <ProductCard
-              product={product}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          </motion.div>
-        ))}
+            <Plus className="h-4 w-4 mr-2" />
+            New Product
+          </Button>
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {productData.data.map((product: Product, index: number) => (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <ProductCard
+                product={product}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </motion.div>
+          ))}
+        </div>
+        <ProductDialog
+          isOpen={isDialogOpen}
+          setIsOpen={setIsDialogOpen}
+          editingProduct={editingProduct}
+          onSubmit={handleSubmit}
+        />
       </div>
-      <ProductDialog
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-        editingProduct={editingProduct}
-        onSubmit={handleSubmit}
-      />
-    </div>
-  );
+    );
+  }
+
+  return <Loading />;
 }
 
 export default Products;

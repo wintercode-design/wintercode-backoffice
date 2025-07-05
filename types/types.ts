@@ -6,135 +6,144 @@ export type Product = {
   stock: number;
   category: string;
   imageUrl: string;
-  status: string;
+  status: Status;
 };
+
+export type Status =
+  | "ACTIVE"
+  | "INACTIVE"
+  | "DRAFT"
+  | "PUBLISHED"
+  | "ARCHIVED"
+  | "PENDING"
+  | "RESOLVED"
+  | "REJECTED";
 
 export type AdsT = {
   id: number;
-  title: string;
+  status: Status;
+  createdAt: string;
   description: string;
   imageUrl: string;
+  title: string;
   linkUrl: string;
   position: string;
   type: string;
-  status: string;
   startDate: string;
   endDate: string;
   priority: number;
-  createdAt: string;
   clicks: number;
   impressions: number;
 };
 
 export type Blog = {
   id: number;
+  status: Status;
+  imageUrl?: string;
   title: string;
-  author: string;
   category: string;
-  status: string;
+  author: string;
   publishedDate: string;
-  tags: string[];
+  tags: string;
   content: string;
 };
 
+export type Priority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+
 export type Contact = {
   id: number;
-  name: string;
   email: string;
+  name: string;
+  status: Status;
+  createdAt: string;
+  priority: Priority;
   phone: string;
   subject: string;
   message: string;
-  status: string;
-  priority: string;
-  createdAt: string;
   replied: boolean;
 };
 
 export type EventT = {
   id: number;
   name: string;
-  date: string;
-  time: string;
-  category: string;
-  location: string;
   description: string;
-  imageUrl: string;
+  date: string;
+  imageUrl?: string;
+  category: string;
+  time: string;
+  location: string;
 };
 
 export type FaqT = {
   id: number;
+  status: Status;
+  createdAt: string;
+  category: string;
   question: string;
   answer: string;
-  category: string;
-  status: string;
   order: number;
-  createdAt: string;
 };
 
 export type Subscriber = {
   id: number;
   email: string;
   name: string;
+  status: Status;
   subscribedAt: string;
-  status: string;
   source: string;
 };
 
 export type Offer = {
   id: number;
-  title: string;
+  status: Status;
+  createdAt: string;
   description: string;
+  imageUrl?: string;
+  title: string;
+  category: string;
   originalPrice: number;
   discountedPrice: number;
   discountPercentage: number;
   validUntil: string;
-  status: string;
-  category: string;
-  createdAt: string;
 };
 
 export type Project = {
   id: number;
+  status: Status;
+  description: string;
+  imageUrl?: string;
   title: string;
-  category: string;
-  status: string;
   startDate: string;
   endDate: string;
-  description: string;
+  category: string;
 };
 
 export type Review = {
   id: number;
+  status: Status;
+  createdAt: string;
+  review: string;
   clientName: string;
   clientTitle: string;
   clientCompany: string;
   rating: number;
-  review: string;
   projectType: string;
-  status: string;
   featured: boolean;
   clientImage: string;
-  createdAt: string;
 };
 
 export type TeamMember = {
   id: number;
-  name: string;
-  role: string;
-  avatarUrl: string;
-  status: string;
   email: string;
+  avatarUrl: string;
+  name: string;
+  status: Status;
+  role: string;
   linkedin: string;
   github: string;
   website: string;
   bio: string;
-  certifications: {
-    url: string;
-    year: string;
-    name: string;
-    issuer: string;
-  }[];
-  achievements: string[];
-  skills: string[];
   resumeUrl: string;
+  achievements: string;
+  skills: string;
 };

@@ -130,10 +130,10 @@ const AdCard = ({
               variant="ghost"
               onClick={() => onToggleStatus(ad.id)}
               className={
-                ad.status === "active" ? "text-green-400" : "text-gray-400"
+                ad.status === "ACTIVE" ? "text-green-400" : "text-gray-400"
               }
             >
-              {ad.status === "active" ? (
+              {ad.status === "ACTIVE" ? (
                 <Eye className="h-3 w-3" />
               ) : (
                 <EyeOff className="h-3 w-3" />

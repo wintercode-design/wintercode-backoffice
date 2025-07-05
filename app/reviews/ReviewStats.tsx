@@ -5,7 +5,7 @@ import { Review } from "@/types/types";
 
 const ReviewStats = ({ reviews }: { reviews: Review[] }) => {
   const publishedReviews = reviews.filter(
-    (r) => r.status === "published"
+    (r) => r.status === "PUBLISHED"
   ).length;
   const featuredReviews = reviews.filter((r) => r.featured).length;
   const averageRating =
@@ -23,7 +23,7 @@ const ReviewStats = ({ reviews }: { reviews: Review[] }) => {
       color: "text-yellow-400",
     },
     {
-      label: "Published",
+      label: "published",
       value: publishedReviews,
       icon: Eye,
       color: "text-green-400",

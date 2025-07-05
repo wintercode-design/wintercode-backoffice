@@ -101,12 +101,12 @@ const ReviewCard = ({
               variant="ghost"
               onClick={() => onToggleVisibility(review.id)}
               className={
-                review.status === "published"
+                review.status === "PUBLISHED"
                   ? "text-green-400"
                   : "text-gray-400"
               }
             >
-              {review.status === "published" ? (
+              {review.status === "PUBLISHED" ? (
                 <Eye className="h-3 w-3" />
               ) : (
                 <EyeOff className="h-3 w-3" />
@@ -137,7 +137,7 @@ const ReviewCard = ({
             </span>
             <span
               className={`px-2 py-1 rounded-full text-xs text-white ${
-                review.status === "published" ? "bg-green-500" : "bg-gray-500"
+                review.status === "PUBLISHED" ? "bg-green-500" : "bg-gray-500"
               }`}
             >
               {review.status}

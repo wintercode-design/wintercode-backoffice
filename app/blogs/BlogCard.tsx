@@ -47,7 +47,7 @@ const BlogCard = ({
             </span>
             <span
               className={`px-2 py-1 text-xs rounded-full ${
-                blog.status === "published"
+                blog.status === "PUBLISHED"
                   ? "bg-green-500/20 text-green-300"
                   : "bg-yellow-500/20 text-yellow-300"
               }`}

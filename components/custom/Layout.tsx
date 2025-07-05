@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/providers/authProvider";
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -94,6 +95,9 @@ function Layout({ children }: { children: ReactNode }) {
             <div className="p-6 mt-auto border-t border-white/10 text-xs text-gray-400">
               <p>© {new Date().getFullYear()} Back Office</p>
               <p>All rights reserved.</p>
+              <div className="mt-4">
+                <LogoutButton />
+              </div>
             </div>
           </motion.aside>
         )}
@@ -122,6 +126,19 @@ function Layout({ children }: { children: ReactNode }) {
         />
       )}
     </div>
+  );
+}
+
+function LogoutButton() {
+  const { logout, token } = useAuth();
+  if (!token) return null;
+  return (
+    <button
+      onClick={logout}
+      className="w-full mt-2 py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700 text-xs"
+    >
+      Logout
+    </button>
   );
 }
 

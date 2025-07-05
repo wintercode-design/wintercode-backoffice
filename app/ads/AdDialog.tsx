@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AdsT } from "@/types/types";
+import { AdsT, Status } from "@/types/types";
 
 const AdDialog = ({
   isOpen,
@@ -54,7 +54,7 @@ const AdDialog = ({
         linkUrl: "",
         position: "header",
         type: "banner",
-        status: "active",
+        status: "ACTIVE",
         startDate: "",
         endDate: "",
         priority: "1",
@@ -77,6 +77,7 @@ const AdDialog = ({
     e.preventDefault();
     onSubmit({
       ...formData,
+      status: formData.status as Status,
       createdAt: new Date("now").toLocaleString(),
       clicks: 0,
       impressions: 0,
@@ -210,8 +211,8 @@ const AdDialog = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-white/20">
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="paused">Paused</SelectItem>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Paused</SelectItem>
                 </SelectContent>
               </Select>
             </div>

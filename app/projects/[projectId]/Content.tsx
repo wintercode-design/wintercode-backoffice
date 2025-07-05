@@ -1,25 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, CheckCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Project } from "@/types/types";
+import { ProjectQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const projectQuery = new ProjectQuery();
+
 const Content = ({ projectId }: { projectId: string }) => {
-  const [project, setProject] = useState<Project | null>(null);
+  const {
+    data: project,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["projectDetail", projectId],
+    queryFn: () => projectQuery.getOne(Number(projectId)),
+    enabled: !!projectId,
+  });
 
-  useEffect(() => {
-    const savedProjects = localStorage.getItem("projects");
-    if (savedProjects) {
-      const projectData = JSON.parse(savedProjects).find(
-        (p: Project) => p.id.toString() === projectId
-      );
-      setProject(projectData);
-    }
-  }, [projectId]);
-
-  if (!project) {
-    return <div className="text-center py-12">Loading project...</div>;
+  if (isLoading) return <Loading status="loading" />;
+  if (isError || !project) {
+    return <div className="text-center py-12">Project not found.</div>;
   }
 
   const formatDate = (dateString: string) =>
@@ -64,7 +68,7 @@ const Content = ({ projectId }: { projectId: string }) => {
             </div>
           </div>
           <div className="flex items-center gap-3 bg-white/5 p-4 rounded-lg">
-            {project.status === "Completed" ? (
+            {project.status === "RESOLVED" ? (
               <CheckCircle className="h-6 w-6 text-green-400" />
             ) : (
               <Clock className="h-6 w-6 text-yellow-400" />

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -10,77 +10,36 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/custom/use-toast";
 import { Subscriber } from "@/types/types";
+import { NewsletterQuery } from "@/queries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Loading from "@/components/custom/Loading";
+
+const newsletterQuery = new NewsletterQuery();
 
 function Newsletter() {
-  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const savedSubscribers = localStorage.getItem("newsletter_subscribers");
-    if (savedSubscribers) {
-      setSubscribers(JSON.parse(savedSubscribers));
-    } else {
-      // Sample data
-      const sampleSubscribers: Subscriber[] = [
-        {
-          id: 1,
-          email: "john.doe@example.com",
-          name: "John Doe",
-          subscribedAt: "2025-01-15T10:30:00Z",
-          status: "active",
-          source: "website",
-        },
-        {
-          id: 2,
-          email: "sarah.johnson@company.com",
-          name: "Sarah Johnson",
-          subscribedAt: "2025-01-14T14:20:00Z",
-          status: "active",
-          source: "blog",
-        },
-        {
-          id: 3,
-          email: "mike.chen@email.com",
-          name: "Mike Chen",
-          subscribedAt: "2025-01-13T09:15:00Z",
-          status: "active",
-          source: "social",
-        },
-        {
-          id: 4,
-          email: "lisa.wang@tech.com",
-          name: "Lisa Wang",
-          subscribedAt: "2025-01-12T16:45:00Z",
-          status: "unsubscribed",
-          source: "website",
-        },
-      ];
-      setSubscribers(sampleSubscribers);
-      localStorage.setItem(
-        "newsletter_subscribers",
-        JSON.stringify(sampleSubscribers)
-      );
-    }
-  }, []);
+  const subscriberData = useQuery({
+    queryKey: ["newsletterFetchAll"],
+    queryFn: () => newsletterQuery.getAll(),
+  });
 
-  const saveSubscribers = (updatedSubscribers: Subscriber[]) => {
-    setSubscribers(updatedSubscribers);
-    localStorage.setItem(
-      "newsletter_subscribers",
-      JSON.stringify(updatedSubscribers)
-    );
-  };
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => newsletterQuery.delete(id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["newsletterFetchAll"] }),
+    onError: () =>
+      toast({ title: "Failed to remove subscriber", variant: "destructive" }),
+  });
 
   const handleDelete = (id: number) => {
-    const updatedSubscribers = subscribers.filter(
-      (subscriber) => subscriber.id !== id
-    );
-    saveSubscribers(updatedSubscribers);
+    deleteMutation.mutate(id);
     toast({ title: "Subscriber removed successfully!" });
   };
 
@@ -106,27 +65,6 @@ function Newsletter() {
     });
   };
 
-  const filteredSubscribers = subscribers.filter(
-    (subscriber) =>
-      subscriber.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      subscriber.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const activeSubscribers = subscribers.filter(
-    (s) => s.status === "active"
-  ).length;
-  const unsubscribedCount = subscribers.filter(
-    (s) => s.status === "unsubscribed"
-  ).length;
-  const thisMonthSubscribers = subscribers.filter((s) => {
-    const subDate = new Date(s.subscribedAt);
-    const now = new Date();
-    return (
-      subDate.getMonth() === now.getMonth() &&
-      subDate.getFullYear() === now.getFullYear()
-    );
-  }).length;
-
   const getSourceColor = (source: string) => {
     switch (source) {
       case "website":
@@ -140,188 +78,191 @@ function Newsletter() {
     }
   };
 
-  return (
-    <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-4xl font-bold gradient-text mb-2">
-              Newsletter Subscribers
-            </h1>
-            <p className="text-gray-400">Manage your email subscribers</p>
+  if (subscriberData.isLoading) {
+    return <Loading status={"loading"} />;
+  }
+
+  if (subscriberData.isError) {
+    return <Loading status={"failed"} />;
+  }
+
+  if (subscriberData.isSuccess) {
+    const subscribers = subscriberData.data;
+    const filteredSubscribers = subscribers.filter(
+      (subscriber: Subscriber) =>
+        subscriber.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        subscriber.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const activeSubscribers = subscribers.filter(
+      (s: Subscriber) => s.status === "ACTIVE"
+    ).length;
+    const unsubscribedCount = subscribers.filter(
+      (s: Subscriber) => s.status === "INACTIVE"
+    ).length;
+    const thisMonthSubscribers = subscribers.filter((s: Subscriber) => {
+      const subDate = new Date(s.subscribedAt);
+      const now = new Date();
+      return (
+        subDate.getMonth() === now.getMonth() &&
+        subDate.getFullYear() === now.getFullYear()
+      );
+    }).length;
+    return (
+      <div className="space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h1 className="text-4xl font-bold gradient-text mb-2">
+                Newsletter Subscribers
+              </h1>
+              <p className="text-gray-400">Manage your email subscribers</p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={handleExport}
+                className="border-white/20 text-white hover:bg-white/10"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+              <Button
+                onClick={handleAddSubscriber}
+                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Add Subscriber
+              </Button>
+            </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={handleExport}
-              className="border-white/20 text-white hover:bg-white/10"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-            <Button
-              onClick={handleAddSubscriber}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Add Subscriber
-            </Button>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="glass-effect border-white/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-sm">Total Subscribers</p>
-                  <p className="text-2xl font-bold text-white">
-                    {subscribers.length}
-                  </p>
-                </div>
-                <Users className="h-8 w-8 text-blue-400" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-effect border-white/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-sm">Active</p>
-                  <p className="text-2xl font-bold text-white">
-                    {activeSubscribers}
-                  </p>
-                </div>
-                <Mail className="h-8 w-8 text-green-400" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-effect border-white/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-sm">This Month</p>
-                  <p className="text-2xl font-bold text-white">
-                    {thisMonthSubscribers}
-                  </p>
-                </div>
-                <Calendar className="h-8 w-8 text-purple-400" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-effect border-white/20">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-sm">Unsubscribed</p>
-                  <p className="text-2xl font-bold text-white">
-                    {unsubscribedCount}
-                  </p>
-                </div>
-                <Users className="h-8 w-8 text-red-400" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search */}
-        <div className="mb-6">
-          <Input
-            placeholder="Search subscribers..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-md bg-white/10 border-white/20 text-white"
-          />
-        </div>
-      </motion.div>
-
-      {/* Subscribers List */}
-      <div className="space-y-4">
-        {filteredSubscribers.map((subscriber, index) => (
-          <motion.div
-            key={subscriber.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <Card className="glass-effect border-white/20 card-hover">
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-white font-medium">
-                        {subscriber.name}
-                      </h3>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs text-white ${getSourceColor(
-                          subscriber.source
-                        )}`}
-                      >
-                        {subscriber.source}
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs text-white ${
-                          subscriber.status === "active"
-                            ? "bg-green-500"
-                            : "bg-red-500"
-                        }`}
-                      >
-                        {subscriber.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <Mail className="h-3 w-3" />
-                        {subscriber.email}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        Subscribed {formatDate(subscriber.subscribedAt)}
-                      </span>
-                    </div>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <Card className="glass-effect border-white/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Total Subscribers</p>
+                    <p className="text-2xl font-bold text-white">
+                      {subscribers.length}
+                    </p>
                   </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDelete(subscriber.id)}
-                      className="text-red-400 hover:bg-red-500/20"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
+                  <Users className="h-8 w-8 text-blue-400" />
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
-        ))}
-      </div>
 
-      {filteredSubscribers.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
-          <p className="text-gray-400 text-lg">
-            {searchTerm
-              ? "No subscribers found matching your search."
-              : "No newsletter subscribers yet."}
-          </p>
+            <Card className="glass-effect border-white/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Active</p>
+                    <p className="text-2xl font-bold text-white">
+                      {activeSubscribers}
+                    </p>
+                  </div>
+                  <Mail className="h-8 w-8 text-green-400" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect border-white/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">This Month</p>
+                    <p className="text-2xl font-bold text-white">
+                      {thisMonthSubscribers}
+                    </p>
+                  </div>
+                  <Calendar className="h-8 w-8 text-purple-400" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect border-white/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Unsubscribed</p>
+                    <p className="text-2xl font-bold text-white">
+                      {unsubscribedCount}
+                    </p>
+                  </div>
+                  <Users className="h-8 w-8 text-red-400" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Search */}
+          <div className="mb-6">
+            <Input
+              placeholder="Search subscribers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-md bg-white/10 border-white/20 text-white"
+            />
+          </div>
         </motion.div>
-      )}
-    </div>
-  );
+
+        {/* Subscribers List */}
+        <div className="space-y-4">
+          {filteredSubscribers.map((subscriber: Subscriber, index: number) => (
+            <motion.div
+              key={subscriber.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Card className="glass-effect border-white/20">
+                <CardContent className="p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`w-2 h-2 rounded-full ${getSourceColor(
+                          subscriber.source
+                        )}`}
+                      ></span>
+                      <span className="text-xs text-gray-400">
+                        {subscriber.source}
+                      </span>
+                      <span className="ml-2 text-xs text-gray-400">
+                        {formatDate(subscriber.subscribedAt)}
+                      </span>
+                    </div>
+                    <div className="font-bold text-white text-lg mb-1">
+                      {subscriber.name}
+                    </div>
+                    <div className="text-gray-400 text-sm mb-1">
+                      {subscriber.email}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 md:items-end">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDelete(subscriber.id)}
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" /> Delete
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return <Loading />;
 }
 
 export default Newsletter;

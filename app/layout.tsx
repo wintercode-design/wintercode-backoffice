@@ -2,16 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/custom/Layout";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import NotificationProvider from "@/providers/notifications";
+import QueryProvider from "@/providers/queryProvider";
+import { AuthProvider } from "@/providers/authProvider";
 
 export const metadata: Metadata = {
   title: "Back Office - Portfolio Management System",
@@ -26,10 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Layout>{children}</Layout>
+      <body className={`antialiased`}>
+        <QueryProvider>
+          <AuthProvider>
+            <NotificationProvider>
+              <Layout>{children}</Layout>
+            </NotificationProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );
