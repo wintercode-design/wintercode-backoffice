@@ -30,6 +30,7 @@ const sidebarItems = [
   { icon: ShoppingBag, label: "Products", path: "/products" },
   { icon: Calendar, label: "Events", path: "/events" },
   { icon: MessageSquare, label: "Contacts", path: "/contacts" },
+  { icon: FileText, label: "Quotes", path: "/quotes" },
   { icon: Mail, label: "Newsletter", path: "/newsletter" },
   { icon: Tag, label: "Offers", path: "/offers" },
   { icon: Send, label: "Send Email", path: "/email" },

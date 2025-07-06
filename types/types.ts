@@ -150,3 +150,28 @@ export type TeamMember = {
   achievements: string;
   skills: string;
 };
+
+export type Quote = {
+  id: number;
+  companyName?: string;
+  contactPerson?: string;
+  phone?: string;
+  email?: string;
+  location?: string;
+  hasWebsite?: boolean;
+  website?: string;
+  businessDescription?: string;
+  targetAudience?: string;
+  products?: string;
+  goals?: string;
+  otherGoal?: string;
+  priorities?: string;
+  designLikes?: string;
+  designDislikes?: string;
+  colorPreferences?: string;
+  referenceWebsites?: string;
+  competitors?: string;
+  budget?: string;
+  timeline?: string;
+  additional?: string;
+};

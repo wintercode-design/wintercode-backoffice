@@ -9,4 +9,5 @@ export { default as ContactQuery } from "./contact";
 export { default as FaqQuery } from "./faq";
 export { default as NewsletterQuery } from "./newsletter";
 export { default as OfferQuery } from "./offer";
+export { default as QuoteQuery } from "./quote";
 export * from "./auth";
