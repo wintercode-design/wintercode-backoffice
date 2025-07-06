@@ -1,16 +1,14 @@
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  Edit,
-  Trash2,
-  Eye,
-  EyeOff,
-  Calendar,
-  ExternalLink,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdsT } from "@/types/types";
+import {
+  Calendar,
+  Edit,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  Trash2,
+} from "lucide-react";
 
 const AdCard = ({
   ad,

@@ -1,21 +1,20 @@
 "use client";
-import React from "react";
+import Loading from "@/components/custom/Loading";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProductQuery } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
+  AlertTriangle,
   ArrowLeft,
+  CheckCircle,
   DollarSign,
   Package,
   Tag,
-  CheckCircle,
-  AlertTriangle,
   XCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { ProductQuery } from "@/queries";
-import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
 
 const productQuery = new ProductQuery();
 
@@ -44,7 +43,7 @@ const Content = ({ productId }: { productId: string }) => {
     );
   }
 
-  const getStatusInfo = (status: String) => {
+  const getStatusInfo = (status: string) => {
     switch (status) {
       case "in-stock":
         return { icon: CheckCircle, color: "text-green-400", text: "In Stock" };

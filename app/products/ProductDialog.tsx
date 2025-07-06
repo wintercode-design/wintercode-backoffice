@@ -1,5 +1,4 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,8 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Product, Status } from "@/types/types";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -18,6 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Product, Status } from "@/types/types";
+import React, { useEffect, useState } from "react";
 
 const ProductDialog = ({
   isOpen,
@@ -71,10 +71,9 @@ const ProductDialog = ({
     status: string;
   }
 
-  interface HandleChangeEvent
-    extends React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> {}
-
-  const handleChange = (e: HandleChangeEvent) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { id, value } = e.target;
     setFormData((prev: FormData) => ({ ...prev, [id]: value }));
   };

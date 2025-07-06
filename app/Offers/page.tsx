@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Plus, Edit, Trash2, Tag, Calendar, DollarSign } from "lucide-react";
+import Loading from "@/components/custom/Loading";
+import { useToast } from "@/components/custom/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -21,11 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/components/custom/use-toast";
-import { Offer, Status } from "@/types/types";
+import { Textarea } from "@/components/ui/textarea";
 import { OfferQuery } from "@/queries";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
+import { Offer, Status } from "@/types/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Calendar, DollarSign, Edit, Plus, Tag, Trash2 } from "lucide-react";
+import React, { useState } from "react";
 
 const offerQuery = new OfferQuery();
 
@@ -175,9 +175,9 @@ function Offers() {
     });
   };
 
-  const isExpired = (validUntil: string) => {
-    return new Date(validUntil) < new Date();
-  };
+  // const isExpired = (validUntil: string) => {
+  //   return new Date(validUntil) < new Date();
+  // };
 
   if (offerData.isLoading) {
     return <Loading status={"loading"} />;
@@ -189,12 +189,12 @@ function Offers() {
 
   if (offerData.isSuccess) {
     const offers = offerData.data;
-    const activeOffers = offers.filter(
-      (o: Offer) => o.status === "ACTIVE" && !isExpired(o.validUntil)
-    ).length;
-    const expiredOffers = offers.filter(
-      (o: Offer) => o.status === "ARCHIVED" || isExpired(o.validUntil)
-    ).length;
+    // const activeOffers = offers.filter(
+    //   (o: Offer) => o.status === "ACTIVE" && !isExpired(o.validUntil)
+    // ).length;
+    // const expiredOffers = offers.filter(
+    //   (o: Offer) => o.status === "ARCHIVED" || isExpired(o.validUntil)
+    // ).length;
     return (
       <div className="space-y-8">
         <motion.div

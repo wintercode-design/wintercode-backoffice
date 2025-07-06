@@ -52,7 +52,7 @@ const ResetPasswordPage = () => {
         {mutation.isPending && <Loading status="loading" />}
         {mutation.isError && (
           <div className="text-red-500 text-sm">
-            {(mutation.error as any)?.response?.data?.message || "Reset failed"}
+            {mutation.error.message || "Reset failed"}
           </div>
         )}
         {success && (

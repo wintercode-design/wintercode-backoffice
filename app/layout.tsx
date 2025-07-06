@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Layout from "@/components/custom/Layout";
+import LayoutComp from "@/components/custom/Layout";
+import { AuthProvider } from "@/providers/authProvider";
 import NotificationProvider from "@/providers/notifications";
 import QueryProvider from "@/providers/queryProvider";
-import { AuthProvider } from "@/providers/authProvider";
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Back Office - Portfolio Management System",
@@ -23,7 +22,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <NotificationProvider>
-              <Layout>{children}</Layout>
+              <LayoutComp>{children}</LayoutComp>
             </NotificationProvider>
           </AuthProvider>
         </QueryProvider>

@@ -1,12 +1,11 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Clock, MapPin, Tag } from "lucide-react";
+import Loading from "@/components/custom/Loading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
+import { motion } from "framer-motion";
+import { ArrowLeft, Calendar, Clock, MapPin, Tag } from "lucide-react";
 import Link from "next/link";
 
 const eventQuery = new EventQuery();

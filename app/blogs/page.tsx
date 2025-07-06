@@ -28,7 +28,7 @@ function Blogs() {
         toast({ title: "Failed to fetch blogs", variant: "destructive" })
       )
       .finally(() => setLoading(false));
-  }, []);
+  }, [toast]);
 
   const handleSubmit = async (formData: Omit<Blog, "id">) => {
     try {

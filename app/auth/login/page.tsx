@@ -56,7 +56,7 @@ const LoginPage = () => {
         {mutation.isPending && <Loading status="loading" />}
         {mutation.isError && (
           <div className="text-red-500 text-sm">
-            {(mutation.error as any)?.response?.data?.message || "Login failed"}
+            {mutation.error.message || "Login failed"}
           </div>
         )}
       </form>
@@ -67,7 +67,7 @@ const LoginPage = () => {
         Forgot password?
       </a>
       <a href="/auth/register" className="mt-2 text-purple-500 hover:underline">
-        Don't have an account? Register
+        {" Don't have an account? Register"}
       </a>
     </div>
   );

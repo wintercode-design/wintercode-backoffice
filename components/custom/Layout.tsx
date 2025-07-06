@@ -1,27 +1,27 @@
 "use client";
-import React, { ReactNode, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/providers/authProvider";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  LayoutDashboard,
-  FolderOpen,
-  FileText,
-  MessageSquare,
-  Mail,
-  Tag,
-  Send,
-  HelpCircle,
-  Star,
-  Megaphone,
-  Users,
-  ShoppingBag,
   Calendar,
+  FileText,
+  FolderOpen,
+  HelpCircle,
+  LayoutDashboard,
+  Mail,
+  Megaphone,
   Menu,
+  MessageSquare,
+  Send,
+  ShoppingBag,
+  Star,
+  Tag,
+  Users,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/providers/authProvider";
+import { usePathname } from "next/navigation";
+import { ReactNode, useState } from "react";
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -40,7 +40,7 @@ const sidebarItems = [
   { icon: Users, label: "Team", path: "/team" },
 ];
 
-function Layout({ children }: { children: ReactNode }) {
+function LayoutComp({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = usePathname();
 
@@ -143,4 +143,4 @@ function LogoutButton() {
   );
 }
 
-export default Layout;
+export default LayoutComp;

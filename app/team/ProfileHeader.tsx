@@ -1,7 +1,6 @@
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, Linkedin, Github, Globe } from "lucide-react";
 import { TeamMember } from "@/types/types";
+import { Github, Globe, Linkedin, Mail } from "lucide-react";
 
 const ProfileHeader = ({ member }: { member: TeamMember }) => {
   return (

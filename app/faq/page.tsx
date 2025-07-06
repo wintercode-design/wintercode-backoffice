@@ -167,9 +167,9 @@ function FAQ() {
   if (faqData.isSuccess) {
     const faqs = faqData.data;
     const sortedFaqs = [...faqs].sort((a, b) => a.order - b.order);
-    const publishedFaqs = faqs.filter(
-      (f: FaqT) => f.status === "PUBLISHED"
-    ).length;
+    // const publishedFaqs = faqs.filter(
+    //   (f: FaqT) => f.status === "PUBLISHED"
+    // ).length;
     return (
       <div className="space-y-8">
         <motion.div

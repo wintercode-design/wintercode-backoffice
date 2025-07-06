@@ -1,20 +1,13 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  Award,
-  BadgeCheck,
-  FileText,
-  Link as LinkIcon,
-} from "lucide-react";
-import ProfileHeader from "../ProfileHeader";
-import ProfileSection from "../ProfileSection";
+import Loading from "@/components/custom/Loading";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { TeamQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
+import { motion } from "framer-motion";
+import { ArrowLeft, Award, FileText } from "lucide-react";
+import Link from "next/link";
+import ProfileHeader from "../ProfileHeader";
+import ProfileSection from "../ProfileSection";
 
 const teamQuery = new TeamQuery();
 

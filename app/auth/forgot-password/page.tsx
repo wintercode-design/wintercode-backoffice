@@ -43,8 +43,7 @@ const ForgotPasswordPage = () => {
         {mutation.isPending && <Loading status="loading" />}
         {mutation.isError && (
           <div className="text-red-500 text-sm">
-            {(mutation.error as any)?.response?.data?.message ||
-              "Request failed"}
+            {mutation.error.message || "Request failed"}
           </div>
         )}
         {success && (

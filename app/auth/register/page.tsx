@@ -65,8 +65,7 @@ const RegisterPage = () => {
         {mutation.isPending && <Loading status="loading" />}
         {mutation.isError && (
           <div className="text-red-500 text-sm">
-            {(mutation.error as any)?.response?.data?.message ||
-              "Registration failed"}
+            {mutation.error.message || "Registration failed"}
           </div>
         )}
       </form>

@@ -1,8 +1,7 @@
-import React from "react";
-import { Edit, Trash2, Star, Eye, EyeOff, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Review } from "@/types/types";
+import { Calendar, Edit, Eye, EyeOff, Star, Trash2 } from "lucide-react";
 
 const ReviewCard = ({
   review,

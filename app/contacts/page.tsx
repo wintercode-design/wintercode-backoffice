@@ -1,15 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  Calendar,
-  MessageSquare,
-  Trash2,
-  Reply,
-  Star,
-} from "lucide-react";
+import Loading from "@/components/custom/Loading";
+import { useToast } from "@/components/custom/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -17,14 +8,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/custom/use-toast";
-import { Contact, Priority, Status } from "@/types/types";
 import { ContactQuery } from "@/queries";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
+import { Contact, Priority } from "@/types/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Mail, MessageSquare, Reply, Star, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 const contactQuery = new ContactQuery();
 

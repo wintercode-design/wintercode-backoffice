@@ -1,5 +1,3 @@
-import React from "react";
-import { Edit, Trash2, Mail, Linkedin, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TeamMember } from "@/types/types";
+import { Edit, Github, Linkedin, Mail, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 const TeamMemberCard = ({

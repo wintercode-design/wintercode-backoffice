@@ -114,7 +114,7 @@ function Dashboard() {
       >
         <h1 className="text-4xl font-bold gradient-text mb-2">Dashboard</h1>
         <p className="text-gray-400">
-          Welcome back! Here's what's happening with your portfolio.
+          {"Welcome back! Here's what's happening with your portfolio."}
         </p>
       </motion.div>
 
