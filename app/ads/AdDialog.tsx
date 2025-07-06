@@ -78,7 +78,9 @@ const AdDialog = ({
     onSubmit({
       ...formData,
       status: formData.status as Status,
-      createdAt: new Date("now").toLocaleString(),
+      createdAt: new Date().toISOString(),
+      startDate: new Date(formData.startDate).toISOString(),
+      endDate: new Date(formData.startDate).toISOString(),
       clicks: 0,
       impressions: 0,
       priority: parseInt(formData.priority),

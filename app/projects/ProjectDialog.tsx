@@ -33,7 +33,7 @@ const ProjectDialog = ({
   const [formData, setFormData] = useState({
     title: "",
     category: "",
-    status: "PENDING",
+    status: "INPROGRESS",
     startDate: "",
     endDate: "",
     description: "",
@@ -46,7 +46,7 @@ const ProjectDialog = ({
       setFormData({
         title: "",
         category: "",
-        status: "PENDING",
+        status: "INPROGRESS",
         startDate: "",
         endDate: "",
         description: "",
@@ -67,7 +67,12 @@ const ProjectDialog = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({ ...formData, status: formData.status as Status });
+    onSubmit({
+      ...formData,
+      status: formData.status as Status,
+      startDate: new Date(formData.startDate).toISOString(),
+      endDate: new Date(formData.endDate).toISOString(),
+    });
   };
 
   return (
@@ -116,9 +121,9 @@ const ProjectDialog = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-white/20">
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
-                  <SelectItem value="On Hold">On Hold</SelectItem>
+                  <SelectItem value="INPROGRESS">In Progress</SelectItem>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value="HALTED">On Hold</SelectItem>
                 </SelectContent>
               </Select>
             </div>

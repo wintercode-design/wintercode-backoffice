@@ -43,7 +43,7 @@ const TeamMemberDialog = ({
     // certifications: "",
     achievements: "",
     skills: "",
-    status: "active",
+    status: "ACTIVE",
   });
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const TeamMemberDialog = ({
         // certifications: "",
         achievements: "",
         skills: "",
-        status: "active",
+        status: "ACTIVE",
       });
     }
   }, [editingMember, isOpen]);
@@ -194,8 +194,8 @@ const TeamMemberDialog = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-white/20">
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>

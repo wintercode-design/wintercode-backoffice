@@ -38,7 +38,7 @@ const ReviewDialog = ({
     rating: "5",
     review: "",
     projectType: "web-development",
-    status: "published",
+    status: "PUBLISHED",
     featured: false,
     clientImage: "",
   });
@@ -57,7 +57,7 @@ const ReviewDialog = ({
         rating: "5",
         review: "",
         projectType: "web-development",
-        status: "published",
+        status: "PUBLISHED",
         featured: false,
         clientImage: "",
       });
@@ -80,7 +80,7 @@ const ReviewDialog = ({
     onSubmit({
       ...formData,
       status: formData.status as Status,
-      createdAt: new Date("now").toLocaleString(),
+      createdAt: new Date().toISOString(),
       rating: parseInt(formData.rating),
     });
   };
@@ -202,8 +202,8 @@ const ReviewDialog = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-white/20">
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="hidden">Hidden</SelectItem>
+                  <SelectItem value="PUBLISHED">Published</SelectItem>
+                  <SelectItem value="INACTIVE">Hidden</SelectItem>
                 </SelectContent>
               </Select>
             </div>

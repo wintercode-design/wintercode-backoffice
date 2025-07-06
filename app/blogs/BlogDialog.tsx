@@ -69,7 +69,7 @@ const BlogDialog = ({
     e.preventDefault();
     onSubmit({
       ...formData,
-      publishedDate: new Date().toDateString(),
+      publishedDate: new Date().toISOString(),
       tags: formData.tags
         .split(",")
         .map((tag) => tag.trim())
@@ -94,7 +94,7 @@ const BlogDialog = ({
             <Input
               id="title"
               value={formData.title}
-              onChange={(e) => handleChange}
+              onChange={handleChange}
               className="bg-white/10 border-white/20 text-white"
               required
             />
@@ -162,8 +162,8 @@ const BlogDialog = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-white/20">
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="PUBLISHED">Published</SelectItem>
+                  <SelectItem value="DRAFT">Draft</SelectItem>
                 </SelectContent>
               </Select>
             </div>

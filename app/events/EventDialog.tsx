@@ -11,6 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { EventT } from "@/types/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const EventDialog = ({
   isOpen,
@@ -29,7 +36,7 @@ const EventDialog = ({
     location: "",
     description: "",
     time: "",
-    category: "",
+    category: "TECH",
     imageUrl: "",
   });
 
@@ -46,7 +53,7 @@ const EventDialog = ({
         location: "",
         description: "",
         time: "",
-        category: "",
+        category: "TECH",
         imageUrl: "",
       });
     }
@@ -59,9 +66,13 @@ const EventDialog = ({
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handleSelectChange = (id: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({ ...formData, date: new Date(formData.date).toISOString() });
   };
 
   return (
@@ -136,6 +147,24 @@ const EventDialog = ({
               className="bg-white/10 border-white/20 text-white"
               rows={3}
             />
+          </div>
+          <div>
+            <Label htmlFor="category" className="text-white">
+              Category
+            </Label>
+            <Select
+              value={formData.category}
+              onValueChange={(v) => handleSelectChange("category", v)}
+            >
+              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-white/20">
+                <SelectItem value="TECH">Tech</SelectItem>
+                <SelectItem value="SOCIAL">Social</SelectItem>
+                <SelectItem value="OTHER">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <Label htmlFor="imageUrl" className="text-white">

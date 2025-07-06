@@ -17,6 +17,9 @@ export type Status =
   | "ARCHIVED"
   | "PENDING"
   | "RESOLVED"
+  | "INPROGRESS"
+  | "COMPLETED"
+  | "HALTED"
   | "REJECTED";
 
 export type AdsT = {

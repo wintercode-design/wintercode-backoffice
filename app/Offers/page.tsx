@@ -88,6 +88,7 @@ function Offers() {
         data: {
           ...formData,
           discountPercentage,
+          validUntil: new Date(formData.validUntil).toISOString(),
           status: formData.status as Status,
           originalPrice: parseFloat(formData.originalPrice),
           discountedPrice: parseFloat(formData.discountedPrice),
@@ -99,6 +100,7 @@ function Offers() {
       createMutation.mutate({
         ...formData,
         discountPercentage,
+        validUntil: new Date(formData.validUntil).toISOString(),
         originalPrice: parseFloat(formData.originalPrice),
         discountedPrice: parseFloat(formData.discountedPrice),
         createdAt: new Date().toISOString().split("T")[0],

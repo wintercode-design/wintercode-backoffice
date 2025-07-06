@@ -10,6 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Product, Status } from "@/types/types";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProductDialog = ({
   isOpen,
@@ -29,7 +37,7 @@ const ProductDialog = ({
     category: "",
     imageUrl: "",
     description: "",
-    status: "in-stock",
+    status: "ACTIVE",
   });
 
   useEffect(() => {
@@ -48,7 +56,7 @@ const ProductDialog = ({
         category: "",
         imageUrl: "",
         description: "",
-        status: "in-stock",
+        status: "ACTIVE",
       });
     }
   }, [editingProduct, isOpen]);
@@ -63,11 +71,16 @@ const ProductDialog = ({
     status: string;
   }
 
-  interface HandleChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+  interface HandleChangeEvent
+    extends React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> {}
 
   const handleChange = (e: HandleChangeEvent) => {
     const { id, value } = e.target;
     setFormData((prev: FormData) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSelectChange = (id: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -141,6 +154,36 @@ const ProductDialog = ({
               className="bg-white/10 border-white/20 text-white"
               required
             />
+          </div>
+          <div>
+            <Label htmlFor="description" className="text-white">
+              Description
+            </Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="bg-white/10 border-white/20 text-white"
+              rows={10}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="status" className="text-white">
+              Status
+            </Label>
+            <Select
+              value={formData.status}
+              onValueChange={(v) => handleSelectChange("status", v)}
+            >
+              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-white/20">
+                <SelectItem value="ACTIVE">Published</SelectItem>
+                <SelectItem value="INACTIVE">Draft</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <Label htmlFor="imageUrl" className="text-white">

@@ -7,7 +7,7 @@ const AdStats = ({ ads }: { ads: AdsT[] }) => {
   const isExpired = (endDate: string) =>
     endDate && new Date(endDate) < new Date();
   const activeAds = ads.filter(
-    (a) => a.status === "active" && !isExpired(a.endDate)
+    (a) => a.status === "ACTIVE" && !isExpired(a.endDate)
   ).length;
   const totalClicks = ads.reduce((sum, a) => sum + a.clicks, 0);
   const totalImpressions = ads.reduce((sum, a) => sum + a.impressions, 0);
