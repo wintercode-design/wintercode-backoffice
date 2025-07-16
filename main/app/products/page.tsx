@@ -10,10 +10,11 @@ import { Product } from "@/types/types";
 import { ProductQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const product = new ProductQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Products() {
+  const { baseURL } = useAppContext();
+  const product = new ProductQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const { toast } = useToast();

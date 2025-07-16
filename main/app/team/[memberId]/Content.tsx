@@ -8,10 +8,11 @@ import { ArrowLeft, Award, FileText } from "lucide-react";
 import Link from "next/link";
 import ProfileHeader from "../ProfileHeader";
 import ProfileSection from "../ProfileSection";
-
-const teamQuery = new TeamQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const Content = ({ memberId }: { memberId: string }) => {
+  const { baseURL } = useAppContext();
+  const teamQuery = new TeamQuery(baseURL);
   const {
     data: member,
     isLoading,

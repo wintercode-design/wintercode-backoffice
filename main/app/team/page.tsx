@@ -10,10 +10,11 @@ import { TeamMember } from "@/types/types";
 import { TeamQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const teamQuery = new TeamQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Team() {
+  const { baseURL } = useAppContext();
+  const teamQuery = new TeamQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const { toast } = useToast();

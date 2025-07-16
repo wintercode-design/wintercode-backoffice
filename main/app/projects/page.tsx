@@ -10,10 +10,11 @@ import { Project } from "@/types/types";
 import { ProjectQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const projectQuery = new ProjectQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Projects() {
+  const { baseURL } = useAppContext();
+  const projectQuery = new ProjectQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const { toast } = useToast();

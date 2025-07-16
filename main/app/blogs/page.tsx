@@ -8,10 +8,11 @@ import BlogCard from "./BlogCard";
 import BlogDialog from "./BlogDialog";
 import { Blog } from "@/types/types";
 import { BlogQuery } from "@/queries";
-
-const blogQuery = new BlogQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Blogs() {
+  const { baseURL } = useAppContext();
+  const blogQuery = new BlogQuery(baseURL);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);

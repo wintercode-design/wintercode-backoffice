@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppContext } from "@/providers/appContext";
 import { ContactQuery } from "@/queries";
 import { Contact, Priority } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,9 +18,9 @@ import { motion } from "framer-motion";
 import { Mail, MessageSquare, Reply, Star, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-const contactQuery = new ContactQuery();
-
 function Contacts() {
+  const { baseURL } = useAppContext();
+  const contactQuery = new ContactQuery(baseURL);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [replyMessage, setReplyMessage] = useState("");
   const [isReplyDialogOpen, setIsReplyDialogOpen] = useState(false);

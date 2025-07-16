@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppContext } from "@/providers/appContext";
 import { OfferQuery } from "@/queries";
 import { Offer, Status } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -27,9 +28,9 @@ import { motion } from "framer-motion";
 import { Calendar, DollarSign, Edit, Plus, Tag, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 
-const offerQuery = new OfferQuery();
-
 function Offers() {
+  const { baseURL } = useAppContext();
+  const offerQuery = new OfferQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
   const [formData, setFormData] = useState({

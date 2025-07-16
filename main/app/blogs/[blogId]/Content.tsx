@@ -7,10 +7,11 @@ import Link from "next/link";
 import { BlogQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const blogQuery = new BlogQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const Content = ({ blogId }: { blogId: string }) => {
+  const { baseURL } = useAppContext();
+  const blogQuery = new BlogQuery(baseURL);
   const {
     data: blog,
     isLoading,

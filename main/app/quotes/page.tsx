@@ -10,10 +10,11 @@ import { Quote } from "@/types/types";
 import { QuoteQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const quoteQuery = new QuoteQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Quotes() {
+  const { baseURL } = useAppContext();
+  const quoteQuery = new QuoteQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
   const { toast } = useToast();

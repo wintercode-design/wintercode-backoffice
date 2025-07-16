@@ -2,6 +2,7 @@
 import Loading from "@/components/custom/Loading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAppContext } from "@/providers/appContext";
 import { ProductQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -16,9 +17,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const productQuery = new ProductQuery();
-
 const Content = ({ productId }: { productId: string }) => {
+  const { baseURL } = useAppContext();
+  const productQuery = new ProductQuery(baseURL);
   const {
     data: product,
     isLoading,

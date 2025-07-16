@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AuthQuery } from "@/queries";
 import Loading from "@/components/custom/Loading";
-
-const authQuery = new AuthQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const ForgotPasswordPage = () => {
+  const { baseURL } = useAppContext();
+  const authQuery = new AuthQuery(baseURL);
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
 

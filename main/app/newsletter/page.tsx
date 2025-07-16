@@ -17,10 +17,11 @@ import { Subscriber } from "@/types/types";
 import { NewsletterQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const newsletterQuery = new NewsletterQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Newsletter() {
+  const { baseURL } = useAppContext();
+  const newsletterQuery = new NewsletterQuery(baseURL);
   const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();

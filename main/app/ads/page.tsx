@@ -11,10 +11,11 @@ import { AdsT, Status } from "@/types/types";
 import { AdQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const adQuery = new AdQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Ads() {
+  const { baseURL } = useAppContext();
+  const adQuery = new AdQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAd, setEditingAd] = useState<AdsT | null>(null);
   const { toast } = useToast();

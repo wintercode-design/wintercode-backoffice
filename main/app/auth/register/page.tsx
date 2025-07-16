@@ -4,10 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { AuthQuery } from "@/queries";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/custom/Loading";
-
-const authQuery = new AuthQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const RegisterPage = () => {
+  const { baseURL } = useAppContext();
+  const authQuery = new AuthQuery(baseURL);
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

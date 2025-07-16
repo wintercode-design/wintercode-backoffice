@@ -7,10 +7,11 @@ import Link from "next/link";
 import { ProjectQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const projectQuery = new ProjectQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const Content = ({ projectId }: { projectId: string }) => {
+  const { baseURL } = useAppContext();
+  const projectQuery = new ProjectQuery(baseURL);
   const {
     data: project,
     isLoading,

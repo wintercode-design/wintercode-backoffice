@@ -33,10 +33,11 @@ import { FaqT, Status } from "@/types/types";
 import { FaqQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const faqQuery = new FaqQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function FAQ() {
+  const { baseURL } = useAppContext();
+  const faqQuery = new FaqQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<FaqT | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);

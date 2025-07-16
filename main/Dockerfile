@@ -1,24 +1,42 @@
-# Dockerfile
-# Use an official Node.js runtime as the base image
-FROM node:22-alpine
+FROM node:22-alpine AS base
 
-# Set the working directory
+# -------- Dependency Stage --------
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Copy the package.json and package-lock.json files
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application files
+# -------- Builder Stage --------
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the Next.js app
-# RUN npm run build
+RUN npm run build
 
-# Expose the port Next.js runs on
+# -------- Runtime Stage --------
+FROM base AS runtime
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
 EXPOSE 3000
 
-# Start the Next.js app
-# RUN npm run start
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

@@ -7,10 +7,11 @@ import Link from "next/link";
 import { QuoteQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const quoteQuery = new QuoteQuery();
+import { useAppContext } from "@/providers/appContext";
 
 const Content = ({ quoteId }: { quoteId: string }) => {
+  const { baseURL } = useAppContext();
+  const quoteQuery = new QuoteQuery(baseURL);
   const {
     data: quote,
     isLoading,

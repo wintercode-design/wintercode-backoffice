@@ -2,15 +2,16 @@
 import Loading from "@/components/custom/Loading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAppContext } from "@/providers/appContext";
 import { EventQuery } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Clock, MapPin, Tag } from "lucide-react";
 import Link from "next/link";
 
-const eventQuery = new EventQuery();
-
 const Content = ({ eventId }: { eventId: string }) => {
+  const { baseURL } = useAppContext();
+  const eventQuery = new EventQuery(baseURL);
   const {
     data: event,
     isLoading,

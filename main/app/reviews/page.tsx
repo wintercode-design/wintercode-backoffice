@@ -11,10 +11,11 @@ import { Review, Status } from "@/types/types";
 import { ReviewQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const reviewQuery = new ReviewQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Reviews() {
+  const { baseURL } = useAppContext();
+  const reviewQuery = new ReviewQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const { toast } = useToast();

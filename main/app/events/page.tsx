@@ -10,10 +10,11 @@ import { EventT } from "@/types/types";
 import { EventQuery } from "@/queries";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/custom/Loading";
-
-const eventQuery = new EventQuery();
+import { useAppContext } from "@/providers/appContext";
 
 function Events() {
+  const { baseURL } = useAppContext();
+  const eventQuery = new EventQuery(baseURL);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventT | null>(null);
   const { toast } = useToast();
