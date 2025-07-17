@@ -13,6 +13,8 @@ export default class AxiosConfig {
         "Content-Type": "application/json",
       },
     });
+    this.requestInterceptorSetup();
+    this.responseInterceptorSetup();
   }
 
   // Request Interceptor: Add Authorization token if available
