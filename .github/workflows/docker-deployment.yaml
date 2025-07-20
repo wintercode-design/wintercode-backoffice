@@ -1,4 +1,4 @@
-name: Deploy Wintercode API
+name: Deploy Wintercode Back Office
 
 on:
   push:

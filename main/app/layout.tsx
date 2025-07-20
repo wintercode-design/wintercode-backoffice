@@ -7,6 +7,7 @@ import QueryProvider from "@/providers/queryProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/providers/appContext";
+import AuthGuard from "@/components/custom/AuthGuard";
 
 export const metadata: Metadata = {
   title: "Back Office - Portfolio Management System",
@@ -27,7 +28,9 @@ export default async function RootLayout({
           <AuthProvider>
             <NotificationProvider>
               <AppProvider baseURL={baseURL ?? ""}>
-                <LayoutComp>{children}</LayoutComp>
+                <AuthGuard>
+                  <LayoutComp>{children}</LayoutComp>
+                </AuthGuard>
               </AppProvider>
             </NotificationProvider>
           </AuthProvider>

@@ -150,3 +150,70 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+  min-height: 300px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 {
+  @apply text-2xl font-bold text-white mb-4;
+}
+
+.ProseMirror h2 {
+  @apply text-xl font-bold text-white mb-3;
+}
+
+.ProseMirror h3 {
+  @apply text-lg font-bold text-white mb-2;
+}
+
+.ProseMirror p {
+  @apply text-gray-300 mb-3;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply text-gray-300 mb-3 pl-6;
+}
+
+.ProseMirror li {
+  @apply mb-1;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 border-cyan-500 pl-4 italic text-gray-300 mb-3;
+}
+
+.ProseMirror code {
+  @apply bg-gray-800 text-cyan-300 px-2 py-1 rounded text-sm;
+}
+
+.ProseMirror pre {
+  @apply bg-gray-800 p-4 rounded-lg mb-3 overflow-x-auto;
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0;
+}
+
+.ProseMirror a {
+  @apply text-cyan-400 underline;
+}
+
+.ProseMirror img {
+  @apply max-w-full h-auto rounded-lg my-4;
+}
+
+.ProseMirror mark {
+  @apply bg-yellow-500/30 text-yellow-200;
+}

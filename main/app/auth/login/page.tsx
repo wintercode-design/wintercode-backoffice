@@ -5,9 +5,11 @@ import { AuthQuery } from "@/queries";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/custom/Loading";
 import { useAppContext } from "@/providers/appContext";
+import { useAuth } from "@/providers/authProvider";
 
 const LoginPage = () => {
   const { baseURL } = useAppContext();
+  const { login } = useAuth();
   const authQuery = new AuthQuery(baseURL);
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -16,8 +18,7 @@ const LoginPage = () => {
   const mutation = useMutation({
     mutationFn: () => authQuery.login({ email, password }),
     onSuccess: (data) => {
-      localStorage.setItem("token", data.token);
-      router.push("/");
+      login(data.token);
     },
   });
 

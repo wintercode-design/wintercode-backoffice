@@ -60,9 +60,10 @@ const Content = ({ blogId }: { blogId: string }) => {
             </span>
           </div>
         </header>
-        <div className="prose prose-invert max-w-none text-gray-300 leading-relaxed">
-          <p>{blog.content}</p>
-        </div>
+        <div
+          className="prose prose-invert max-w-none text-gray-300 leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
         <footer className="mt-8 pt-8 border-t border-white/20">
           <div className="flex items-center gap-2 flex-wrap">
             <Tag className="h-4 w-4 text-gray-400" />

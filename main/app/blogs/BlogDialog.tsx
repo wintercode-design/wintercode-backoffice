@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import TipTapEditor from "@/components/ui/tiptap-editor";
 import { Blog, Status } from "@/types/types";
 
 const BlogDialog = ({
@@ -126,16 +127,16 @@ const BlogDialog = ({
             </div>
           </div>
           <div>
-            <Label htmlFor="content" className="text-white">
+            <Label htmlFor="content" className="text-white mb-2 block">
               Content
             </Label>
-            <Textarea
-              id="content"
+            <TipTapEditor
               value={formData.content}
-              onChange={handleChange}
-              className="bg-white/10 border-white/20 text-white"
-              rows={10}
-              required
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, content: value }))
+              }
+              placeholder="Write your blog content here..."
+              className="bg-white/10 border-white/20"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">

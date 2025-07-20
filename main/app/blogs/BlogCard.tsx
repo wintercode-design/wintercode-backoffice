@@ -4,6 +4,13 @@ import { Blog } from "@/types/types";
 import { Calendar, Edit, Trash2, User } from "lucide-react";
 import Link from "next/link";
 
+// Helper function to strip HTML tags for preview
+const stripHtml = (html: string) => {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
 const BlogCard = ({
   blog,
   onEdit,
@@ -38,7 +45,7 @@ const BlogCard = ({
       <CardContent className="flex-grow flex flex-col justify-between">
         <div>
           <p className="text-gray-300 text-sm mb-4 line-clamp-3">
-            {blog.content}
+            {stripHtml(blog.content)}
           </p>
           <div className="flex items-center gap-2 flex-wrap mb-4">
             <span className="px-2 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full">
