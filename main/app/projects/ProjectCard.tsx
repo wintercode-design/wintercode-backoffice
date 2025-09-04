@@ -30,9 +30,10 @@ const ProjectCard = ({
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between">
         <div>
-          <p className="text-gray-300 text-sm mb-4 line-clamp-2">
-            {project.description}
-          </p>
+          <div
+            dangerouslySetInnerHTML={{ __html: project.description }}
+            className="text-gray-300 text-sm mb-4 line-clamp-4"
+          />
           <div className="flex items-center text-xs text-gray-400 gap-4 mb-4">
             <span className="flex items-center gap-1">
               <Calendar className="h-3 w-3" /> {formatDate(project.startDate)} -{" "}

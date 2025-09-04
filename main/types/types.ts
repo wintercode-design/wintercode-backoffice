@@ -41,14 +41,21 @@ export type AdsT = {
 
 export type Blog = {
   id: number;
-  status: Status;
-  imageUrl?: string;
   title: string;
-  category: string;
+  slug: string;
+  imageUrl: string | null;
+  coverImageUrl: string | null;
   author: string;
-  publishedDate: string;
+  authorId: number | null;
+  category: string;
+  status: Status;
+  publishedDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  excerpt: string | null;
   tags: string;
   content: string;
+  isFeatured: boolean;
 };
 
 export type Priority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
@@ -112,6 +119,7 @@ export type Offer = {
 
 export type Project = {
   id: number;
+  slug?: string;
   status: Status;
   description: string;
   imageUrl?: string;

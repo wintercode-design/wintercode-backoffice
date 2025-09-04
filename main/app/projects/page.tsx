@@ -41,7 +41,11 @@ function Projects() {
     }: {
       id: number;
       formData: Omit<Project, "id">;
-    }) => projectQuery.update(id, formData),
+    }) => {
+      const nData = { ...formData, id: null };
+      const { id: ids, slug: s, ...fData } = nData;
+      return projectQuery.update(id, fData);
+    },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["projectsFetchAll"] }),
     onError: () =>

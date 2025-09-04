@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Project, Status } from "@/types/types";
+import TiptapEditor from "@/components/custom/TiptapEditor";
 
 const ProjectDialog = ({
   isOpen,
@@ -30,8 +31,9 @@ const ProjectDialog = ({
   editingProject: Project | null;
   onSubmit: (project: Omit<Project, "id">) => void;
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<Project, "id">>({
     title: "",
+    imageUrl: "",
     category: "",
     status: "INPROGRESS",
     startDate: "",
@@ -45,6 +47,7 @@ const ProjectDialog = ({
     } else {
       setFormData({
         title: "",
+        imageUrl: "",
         category: "",
         status: "INPROGRESS",
         startDate: "",
@@ -59,6 +62,10 @@ const ProjectDialog = ({
   ) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleEditor = (value: string) => {
+    formData.description = value;
   };
 
   const handleSelectChange = (id: string, value: string) => {
@@ -77,33 +84,21 @@ const ProjectDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="glass-effect border-white/20 max-w-2xl">
+      <DialogContent className="glass-effect border-white/20 !max-w-7xl mx-auto max-h-[95vh]">
         <DialogHeader>
           <DialogTitle className="text-white">
             {editingProject ? "Edit Project" : "Create New Project"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title" className="text-white">
-              Title
-            </Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="bg-white/10 border-white/20 text-white"
-              required
-            />
-          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="category" className="text-white">
-                Category
+              <Label htmlFor="title" className="text-white">
+                Title
               </Label>
               <Input
-                id="category"
-                value={formData.category}
+                id="title"
+                value={formData.title}
                 onChange={handleChange}
                 className="bg-white/10 border-white/20 text-white"
                 required
@@ -126,6 +121,32 @@ const ProjectDialog = ({
                   <SelectItem value="HALTED">On Hold</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="category" className="text-white">
+                Category
+              </Label>
+              <Input
+                id="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="bg-white/10 border-white/20 text-white"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="imageUrl" className="text-white">
+                Image
+              </Label>
+              <Input
+                id="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                className="bg-white/10 border-white/20 text-white"
+                required
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -158,12 +179,16 @@ const ProjectDialog = ({
             <Label htmlFor="description" className="text-white">
               Description
             </Label>
-            <Textarea
+            {/* <Textarea
               id="description"
               value={formData.description}
               onChange={handleChange}
-              className="bg-white/10 border-white/20 text-white"
+              className="bg-white/10 border-white/20 text-white max-h-[300px] overflow-auto"
               rows={4}
+            /> */}
+            <TiptapEditor
+              value={formData.description}
+              onChange={handleEditor}
             />
           </div>
           <div className="flex justify-end gap-2 pt-4">

@@ -31,26 +31,44 @@ const BlogDialog = ({
   editingBlog: Blog | null;
   onSubmit: (formData: Omit<Blog, "id">) => void;
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<Blog, "id">>({
     title: "",
+    slug: "",
+    imageUrl: "",
+    coverImageUrl: "",
     author: "",
+    authorId: null,
     category: "Tech",
-    status: "PUBLISHED",
-    content: "",
+    status: "PUBLISHED" as Status,
+    publishedDate: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    excerpt: "",
     tags: "",
+    content: "",
+    isFeatured: false,
   });
 
   useEffect(() => {
     if (editingBlog) {
-      setFormData({ ...editingBlog, tags: editingBlog.tags });
+      setFormData({ ...editingBlog });
     } else {
       setFormData({
         title: "",
+        slug: "",
+        imageUrl: "",
+        coverImageUrl: "",
         author: "Admin",
+        authorId: null,
         category: "Tech",
-        status: "PUBLISHED",
-        content: "",
+        status: "PUBLISHED" as Status,
+        publishedDate: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        excerpt: "",
         tags: "",
+        content: "",
+        isFeatured: false,
       });
     }
   }, [editingBlog, isOpen]);
@@ -58,8 +76,18 @@ const BlogDialog = ({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    const { id, value, type } = e.target;
+    if (type === "checkbox" && e.target instanceof HTMLInputElement) {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: (e.target as HTMLInputElement).checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+    }
   };
 
   const handleSelectChange = (id: string, value: string) => {
@@ -68,9 +96,12 @@ const BlogDialog = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const now = new Date();
     onSubmit({
       ...formData,
-      publishedDate: new Date().toISOString(),
+      publishedDate: formData.publishedDate || now,
+      createdAt: formData.createdAt || now,
+      updatedAt: now,
       tags: formData.tags
         .split(",")
         .map((tag) => tag.trim())
@@ -95,6 +126,18 @@ const BlogDialog = ({
             <Input
               id="title"
               value={formData.title}
+              onChange={handleChange}
+              className="bg-white/10 border-white/20 text-white"
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="slug" className="text-white">
+              Slug
+            </Label>
+            <Input
+              id="slug"
+              value={formData.slug}
               onChange={handleChange}
               className="bg-white/10 border-white/20 text-white"
               required
@@ -125,6 +168,42 @@ const BlogDialog = ({
                 required
               />
             </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="imageUrl" className="text-white">
+                Image URL
+              </Label>
+              <Input
+                id="imageUrl"
+                value={formData.imageUrl || ""}
+                onChange={handleChange}
+                className="bg-white/10 border-white/20 text-white"
+              />
+            </div>
+            <div>
+              <Label htmlFor="coverImageUrl" className="text-white">
+                Cover Image URL
+              </Label>
+              <Input
+                id="coverImageUrl"
+                value={formData.coverImageUrl || ""}
+                onChange={handleChange}
+                className="bg-white/10 border-white/20 text-white"
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="excerpt" className="text-white">
+              Excerpt
+            </Label>
+            <Textarea
+              id="excerpt"
+              value={formData.excerpt || ""}
+              onChange={handleChange}
+              className="bg-white/10 border-white/20 text-white"
+              rows={2}
+            />
           </div>
           <div>
             <Label htmlFor="content" className="text-white mb-2 block">
@@ -168,6 +247,18 @@ const BlogDialog = ({
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              id="isFeatured"
+              type="checkbox"
+              checked={formData.isFeatured}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            <Label htmlFor="isFeatured" className="text-white">
+              Featured Post
+            </Label>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button
