@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
-import React, { useState } from "react";
+import Loading from "@/components/custom/Loading";
+import { useToast } from "@/components/custom/use-toast";
+import { Button } from "@/components/ui/button";
+import { useAppContext } from "@/providers/appContext";
+import { ProjectQuery } from "@/queries";
+import { Project } from "@/types/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/custom/use-toast";
+import { useState } from "react";
 import ProjectCard from "./ProjectCard";
 import ProjectDialog from "./ProjectDialog";
-import { Project } from "@/types/types";
-import { ProjectQuery } from "@/queries";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Loading from "@/components/custom/Loading";
-import { useAppContext } from "@/providers/appContext";
 
 function Projects() {
   const { baseURL } = useAppContext();
@@ -43,7 +45,7 @@ function Projects() {
       formData: Omit<Project, "id">;
     }) => {
       const nData = { ...formData, id: null };
-      const { id: ids, slug: s, ...fData } = nData;
+      const { id: _id, slug: _slug, ...fData } = nData;
       return projectQuery.update(id, fData);
     },
     onSuccess: () =>

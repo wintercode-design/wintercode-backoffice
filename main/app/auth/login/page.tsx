@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { AuthQuery } from "@/queries";
-import { useRouter } from "next/navigation";
 import Loading from "@/components/custom/Loading";
 import { useAppContext } from "@/providers/appContext";
 import { useAuth } from "@/providers/authProvider";
@@ -11,7 +10,6 @@ const LoginPage = () => {
   const { baseURL } = useAppContext();
   const { login } = useAuth();
   const authQuery = new AuthQuery(baseURL);
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
