@@ -12,6 +12,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { createLowlight, common } from "lowlight";
 import "highlight.js/styles/github.css";
+import { Button } from "../ui/button";
 
 const lowlight = createLowlight(common);
 
@@ -80,6 +81,7 @@ export default function TiptapEditor({
       <div className="flex flex-wrap gap-2 mb-3 border-b pb-2">
         {/* Text Formatting */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("bold") ? "bg-blue-500" : "bg-gray-400"
@@ -88,6 +90,7 @@ export default function TiptapEditor({
           Bold
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("italic") ? "bg-blue-500" : "bg-gray-400"
@@ -96,6 +99,7 @@ export default function TiptapEditor({
           Italic
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("underline") ? "bg-blue-500" : "bg-gray-400"
@@ -104,6 +108,7 @@ export default function TiptapEditor({
           Underline
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("strike") ? "bg-blue-500" : "bg-gray-400"
@@ -112,6 +117,7 @@ export default function TiptapEditor({
           Strike
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("code") ? "bg-blue-500" : "bg-gray-400"
@@ -123,6 +129,7 @@ export default function TiptapEditor({
         {/* Headings */}
         {[1, 2, 3].map((level) => (
           <button
+            type="button"
             key={level}
             onClick={() =>
               editor
@@ -143,6 +150,7 @@ export default function TiptapEditor({
 
         {/* Lists */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("bulletList") ? "bg-blue-500" : "bg-gray-400"
@@ -151,6 +159,7 @@ export default function TiptapEditor({
           • List
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("orderedList") ? "bg-blue-500" : "bg-gray-400"
@@ -159,6 +168,7 @@ export default function TiptapEditor({
           1. List
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleTaskList().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("taskList") ? "bg-blue-500" : "bg-gray-400"
@@ -169,6 +179,7 @@ export default function TiptapEditor({
 
         {/* Blockquote & Code */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("blockquote") ? "bg-blue-500" : "bg-gray-400"
@@ -177,6 +188,7 @@ export default function TiptapEditor({
           Quote
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={`px-3 py-1 rounded ${
             editor.isActive("codeBlock") ? "bg-blue-500" : "bg-gray-400"
@@ -186,15 +198,24 @@ export default function TiptapEditor({
         </button>
 
         {/* Links & Images */}
-        <button onClick={addLink} className="px-3 py-1 rounded bg-gray-400">
+        <button
+          type="button"
+          onClick={addLink}
+          className="px-3 py-1 rounded bg-gray-400"
+        >
           Add Link
         </button>
-        <button onClick={addImage} className="px-3 py-1 rounded bg-gray-400">
+        <button
+          type="button"
+          onClick={addImage}
+          className="px-3 py-1 rounded bg-gray-400"
+        >
           Add Image
         </button>
 
         {/* Alignment */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
           className={`px-3 py-1 rounded ${
             editor.isActive({ textAlign: "left" })
@@ -205,6 +226,7 @@ export default function TiptapEditor({
           Left
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
           className={`px-3 py-1 rounded ${
             editor.isActive({ textAlign: "center" })
@@ -215,6 +237,7 @@ export default function TiptapEditor({
           Center
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
           className={`px-3 py-1 rounded ${
             editor.isActive({ textAlign: "right" })
@@ -227,12 +250,14 @@ export default function TiptapEditor({
 
         {/* Undo / Redo */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().undo().run()}
           className="px-3 py-1 rounded bg-gray-400"
         >
           Undo
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().redo().run()}
           className="px-3 py-1 rounded bg-gray-400"
         >
@@ -241,6 +266,7 @@ export default function TiptapEditor({
 
         {/* Clear Formatting */}
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().unsetAllMarks().clearNodes().run()
           }

@@ -15,7 +15,9 @@ function Blogs() {
   const blogQuery = new BlogQuery(baseURL);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const [editingBlog, setEditingBlog] = useState<Omit<Blog, "authorId"> | null>(
+    null
+  );
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +33,9 @@ function Blogs() {
       .finally(() => setLoading(false));
   }, [toast]);
 
-  const handleSubmit = async (formData: Omit<Blog, "id">) => {
+  const handleSubmit = async (
+    formData: Omit<Blog, "id" | "authorId" | "slug" | "createdAt" | "updatedAt">
+  ) => {
     try {
       if (editingBlog) {
         const updated = await blogQuery.update(editingBlog.id, formData);
@@ -52,7 +56,8 @@ function Blogs() {
   };
 
   const handleEdit = (blog: Blog) => {
-    setEditingBlog(blog);
+    const { authorId, ...editBlog } = blog;
+    setEditingBlog(editBlog);
     setIsDialogOpen(true);
   };
 

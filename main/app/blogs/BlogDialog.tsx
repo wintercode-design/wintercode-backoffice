@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TipTapEditor from "@/components/ui/tiptap-editor";
+import TipTapEditor from "@/components/custom/TiptapEditor";
 import { Blog, Status } from "@/types/types";
 
 const BlogDialog = ({
@@ -28,21 +28,21 @@ const BlogDialog = ({
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  editingBlog: Blog | null;
-  onSubmit: (formData: Omit<Blog, "id">) => void;
+  editingBlog: Omit<Blog, "authorId"> | null;
+  onSubmit: (
+    formData: Omit<Blog, "id" | "authorId" | "slug" | "createdAt" | "updatedAt">
+  ) => void;
 }) => {
-  const [formData, setFormData] = useState<Omit<Blog, "id">>({
+  const [formData, setFormData] = useState<
+    Omit<Blog, "id" | "authorId" | "slug" | "createdAt" | "updatedAt">
+  >({
     title: "",
-    slug: "",
     imageUrl: "",
     coverImageUrl: "",
     author: "",
-    authorId: null,
     category: "Tech",
     status: "PUBLISHED" as Status,
-    publishedDate: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    publishedDate: new Date().toISOString(),
     excerpt: "",
     tags: "",
     content: "",
@@ -51,20 +51,17 @@ const BlogDialog = ({
 
   useEffect(() => {
     if (editingBlog) {
-      setFormData({ ...editingBlog });
+      const { id, slug, createdAt, updatedAt, ...nEditingBlog } = editingBlog;
+      setFormData({ ...nEditingBlog });
     } else {
       setFormData({
         title: "",
-        slug: "",
         imageUrl: "",
         coverImageUrl: "",
         author: "Admin",
-        authorId: null,
         category: "Tech",
         status: "PUBLISHED" as Status,
-        publishedDate: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        publishedDate: new Date().toISOString(),
         excerpt: "",
         tags: "",
         content: "",
@@ -90,6 +87,10 @@ const BlogDialog = ({
     }
   };
 
+  const handleEditor = (value: string) => {
+    formData.content = value;
+  };
+
   const handleSelectChange = (id: string, value: string) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
@@ -99,9 +100,7 @@ const BlogDialog = ({
     const now = new Date();
     onSubmit({
       ...formData,
-      publishedDate: formData.publishedDate || now,
-      createdAt: formData.createdAt || now,
-      updatedAt: now,
+      publishedDate: formData.publishedDate || now.toISOString(),
       tags: formData.tags
         .split(",")
         .map((tag) => tag.trim())
@@ -112,7 +111,7 @@ const BlogDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="glass-effect border-white/20 max-w-3xl">
+      <DialogContent className="glass-effect border-white/20 !max-w-7xl max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-white">
             {editingBlog ? "Edit Blog Post" : "Create New Post"}
@@ -126,18 +125,6 @@ const BlogDialog = ({
             <Input
               id="title"
               value={formData.title}
-              onChange={handleChange}
-              className="bg-white/10 border-white/20 text-white"
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="slug" className="text-white">
-              Slug
-            </Label>
-            <Input
-              id="slug"
-              value={formData.slug}
               onChange={handleChange}
               className="bg-white/10 border-white/20 text-white"
               required
@@ -209,14 +196,7 @@ const BlogDialog = ({
             <Label htmlFor="content" className="text-white mb-2 block">
               Content
             </Label>
-            <TipTapEditor
-              value={formData.content}
-              onChange={(value) =>
-                setFormData((prev) => ({ ...prev, content: value }))
-              }
-              placeholder="Write your blog content here..."
-              className="bg-white/10 border-white/20"
-            />
+            <TipTapEditor value={formData.content} onChange={handleEditor} />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>

@@ -49,9 +49,9 @@ export type Blog = {
   authorId: number | null;
   category: string;
   status: Status;
-  publishedDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  publishedDate: string;
+  createdAt: string;
+  updatedAt: string;
   excerpt: string | null;
   tags: string;
   content: string;
